@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import shortid from 'shortid';
 import ContactForm from './components/ContactForm';
 import ContactList from './components/ContactList';
@@ -16,24 +18,24 @@ export default class App extends Component {
         filter: '',
     };
 
-    // componentDidMount() {
-    //     const contacts = localStorage.getItem('contacts');
-    //     const parsedContacts = JSON.parse(contacts);
+    componentDidMount() {
+        const contacts = localStorage.getItem('contacts');
+        const parsedContacts = JSON.parse(contacts);
 
-    //     if (parsedContacts) {
-    //         this.setState({ contacts: parsedContacts });
-    //     }
-    // }
+        if (parsedContacts) {
+            this.setState({ contacts: parsedContacts });
+        }
+    }
 
-    // componentDidUpdate(prevProps, prevState) {
-    //     const nextContacts = this.state.contacts;
-    //     const prevContacts = prevState.contacts;
+    componentDidUpdate(prevProps, prevState) {
+        const nextContacts = this.state.contacts;
+        const prevContacts = prevState.contacts;
 
-    //     if (nextContacts !== prevContacts) {
-    //         console.log('updated contacts!');
-    //         localStorage.setItem('contacts', JSON.stringify(nextContacts));
-    //     }
-    // }
+        if (nextContacts !== prevContacts) {
+            console.log('updated contacts!');
+            localStorage.setItem('contacts', JSON.stringify(nextContacts));
+        }
+    }
 
     formSubmitHandler = ({ name, number }) => {
         this.addContact(name, number);
@@ -46,7 +48,11 @@ export default class App extends Component {
         );
 
         if (checkForDoubleName) {
-            return alert(`${name} is already in contacts!`);
+            // return alert(`${name} is already in contacts!`);
+            toast.error(`${name} is already in contacts!`, {
+                theme: 'colored',
+            });
+            return;
         }
 
         const newContact = {
@@ -101,6 +107,7 @@ export default class App extends Component {
                         onDeleteContact={this.deleteContact}
                     />
                 </Section>
+                <ToastContainer autoClose={2000} />
             </div>
         );
     }
